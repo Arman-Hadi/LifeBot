@@ -1,32 +1,58 @@
-import urllib3, telepot
+from django.shortcuts import get_object_or_404, get_list_or_404
+from django.contrib.auth.models import User
 
-proxy_url = "http://proxy.server:3128"
-telepot.api._pools = {
-    'default': urllib3.ProxyManager(proxy_url=proxy_url,
-        num_pools=3, maxsize=10, retries=False, timeout=30),
-}
-telepot.api._onetime_pool_spec = (urllib3.ProxyManager,
-    dict(proxy_url=proxy_url, num_pools=1,
-    maxsize=1, retries=False, timeout=30))
+from rest_framework.response import Response 
+from rest_framework.views import APIView
+from rest_framework.generics import \
+    RetrieveUpdateDestroyAPIView, ListAPIView, ListAPIView
 
-secret = "f36ab0c8-d564-40a5-9f6b-4a18820b7513"
-bot = telepot.Bot('1746290681:AAGqISC4M37Fsy6Cq1TNgTKOeG0YJVPUWQ4')
-bot.setWebhook("https://armanahdi.pythonanywhere.com/{}".format(secret),
-    max_connections=1)
+from .models import QuestionType, Question, Answer
+from .serializers import QuestionSerializer, \
+    QuestionTypeSerializer, AnswerSerializer
 
 
-def telegram_webhook(request):
-    update = request['POST']
-    print('-------------new hook-----------------')
-    if "message" in update:
-        print('-------------new message-----------------')
-        chat_id = update["message"]["chat"]["id"]
-        if "text" in update["message"]:
-            text = update["message"]["text"]
-            try:
-                #reply = text_replier(text, update["message"]["chat"])
-                bot.sendMessage(chat_id, 'hello')
-            except Exception as e:
-                bot.sendMessage(chat_id, f"Something wrong happend! Please forward this message to @MrArmanHadi:\n{e}")
-        else:
-            bot.sendMessage(chat_id, "ببین یه چیزی بهت میگما!")
+class Index(APIView):
+    def get(self, request):
+        return Response("Hello bitch")
+
+
+class QuestionView(RetrieveUpdateDestroyAPIView):
+    serializer_class = QuestionSerializer
+
+    def get_object(self):
+        kw = self.kwargs
+        return get_object_or_404(Question, message_id=kw['message_id'])
+
+
+class QuestionTypeView(RetrieveUpdateDestroyAPIView):
+    serializer_class = QuestionTypeSerializer
+
+    def get_object(self):
+        kw = self.kwargs
+        if 'pk' in kw:
+            return get_object_or_404(QuestionType, pk=kw['pk'])
+        elif 'name' in kw:
+            return get_object_or_404(QuestionType, name=kw['name'])
+
+
+class QuestionTypeListView(ListAPIView):
+    queryset = QuestionType.objects.all()
+    serializer_class = QuestionTypeSerializer
+
+
+class AnswerView(RetrieveUpdateDestroyAPIView):
+    serializer_class = AnswerSerializer
+
+    def get_object(self):
+        mid = self.kwargs['message_id']
+        quest = get_object_or_404(Question, message_id=mid)
+        return get_object_or_404(Answer, question=quest)
+
+
+class AnswerUserView(ListAPIView):
+    serializer_class = AnswerSerializer
+
+    def get_queryset(self):
+        username = str(self.kwargs['username'])
+        user = get_object_or_404(User, username=username)
+        return get_list_or_404(Answer, user=user)

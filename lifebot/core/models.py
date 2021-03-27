@@ -13,11 +13,11 @@ class QuestionType(models.Model):
 
 class Question(models.Model):
     qtype = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
-    message_id = models.IntegerField(verbose_name='Message ID', default=123)
+    message_id = models.IntegerField(verbose_name='Message ID', unique=True)
     date_asked = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.qtype)
+        return f'{str(self.qtype)} - {self.message_id}'
 
 
 class Answer(models.Model):
@@ -38,4 +38,4 @@ class Answer(models.Model):
         auto_now=True)
 
     def __str__(self):
-        return self.answer
+        return f'{self.answer} - {self.pk}'
