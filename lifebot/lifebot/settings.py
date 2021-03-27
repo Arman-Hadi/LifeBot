@@ -25,7 +25,7 @@ SECRET_KEY = '5i$%)lk=(%pp6j6ds3n(1-h!6px@uzvjfdm7_5*fc--n&z@@@k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'armanahdi.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
