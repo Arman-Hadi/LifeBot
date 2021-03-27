@@ -1,4 +1,5 @@
 lifebot/lifebot/local_settings.py
+lifebot/core/views.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
