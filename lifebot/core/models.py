@@ -7,10 +7,17 @@ class QuestionType(models.Model):
     text = models.TextField(verbose_name='Question Text', max_length=350)
     date_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Question(models.Model):
     qtype = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
+    message_id = models.IntegerField(verbose_name='Message ID', default=123)
     date_asked = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.qtype)
 
 
 class Answer(models.Model):
@@ -29,3 +36,6 @@ class Answer(models.Model):
     answer_date = models.DateTimeField(
         verbose_name='Answer Date',
         auto_now=True)
+
+    def __str__(self):
+        return self.answer
