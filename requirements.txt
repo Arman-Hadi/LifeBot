@@ -4,6 +4,8 @@ async-timeout==3.0.1
 attrs==20.3.0
 chardet==4.0.0
 Django==3.1.7
+django-rest-framework==0.1.0
+djangorestframework==3.12.4
 idna==3.1
 multidict==5.1.0
 pytz==2021.1
