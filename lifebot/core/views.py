@@ -1,14 +1,14 @@
 from django.shortcuts import get_object_or_404, get_list_or_404
-from django.contrib.auth.models import User
 
 from rest_framework.response import Response 
 from rest_framework.views import APIView
 from rest_framework.generics import \
-    RetrieveUpdateDestroyAPIView, ListAPIView, ListAPIView
+    RetrieveUpdateDestroyAPIView, ListAPIView, \
+        ListAPIView, CreateAPIView
 
-from .models import QuestionType, Question, Answer
+from .models import QuestionType, Question, Answer, TelUser
 from .serializers import QuestionSerializer, \
-    QuestionTypeSerializer, AnswerSerializer
+    QuestionTypeSerializer, AnswerSerializer, UserSerializer
 
 
 class Index(APIView):
@@ -54,5 +54,21 @@ class AnswerUserView(ListAPIView):
 
     def get_queryset(self):
         username = str(self.kwargs['username'])
-        user = get_object_or_404(User, username=username)
+        user = get_object_or_404(TelUser, chat_id=username)
         return get_list_or_404(Answer, user=user)
+
+
+class AnswerCreateView(CreateAPIView):
+    serializer_class = AnswerSerializer
+
+
+class UserView(RetrieveUpdateDestroyAPIView):
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        kw = self.kwargs
+        return get_object_or_404(TelUser, chat_id=kw['chat_id'])
+
+
+class UserCreateView(CreateAPIView):
+    serializer_class = UserSerializer

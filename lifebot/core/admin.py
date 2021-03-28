@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from .models import Question, QuestionType, Answer
+from .models import Question, QuestionType, Answer, TelUser
+
+
+@admin.register(TelUser)
+class TelUserAdmin(admin.ModelAdmin):
+    list_display = ('chat_id', 'first_name', 'last_name', 'tel_username')
+    search_fields = ('first_name', 'chat_id', 'last_name', 'tel_username')
+    list_filter = ('date_joined',)
 
 
 @admin.register(QuestionType)
