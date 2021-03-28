@@ -24,12 +24,14 @@ class QuestionSerializer(serializers.ModelSerializer):
                 name=validated_data['type_name'])
             q = Question(qtype=qtype,
                 message_id=validated_data['message_id'])
+            q.save()
             return q
         elif 'type_id' in validated_data:
             qtype = QuestionType.objects.get(
                 pk=validated_data['type_id'])
             q = Question(qtype=qtype,
                 message_id=validated_data['message_id'])
+            q.save()
             return q
     
     def validate(self, data):
