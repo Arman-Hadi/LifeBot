@@ -10,10 +10,38 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class QuestionSerializer(serializers.ModelSerializer):
+    type_name = serializers.CharField(write_only=True, default="")
+    type_id = serializers.IntegerField(write_only=True, default="")
+
     class Meta:
         model = Question
         fields = '__all__'
         depth = 2
+
+    def create(self, validated_data):
+        if 'type_name' in validated_data:
+            qtype = QuestionType.objects.get(
+                name=validated_data['type_name'])
+            q = Question(qtype=qtype,
+                message_id=validated_data['message_id'])
+            return q
+        elif 'type_id' in validated_data:
+            qtype = QuestionType.objects.get(
+                pk=validated_data['type_id'])
+            q = Question(qtype=qtype,
+                message_id=validated_data['message_id'])
+            return q
+    
+    def validate(self, data):
+        if data['type_name'] == "":
+            data.pop('type_name')
+        if data['type_id'] == "":
+            data.pop('type_id')
+        if not 'type_name' in data or not 'type_id' in data:
+            raise serializers.ValidationError(
+            {'error': "You must send either 'type_name' or "
+                "'type_id' to distinguish Question Type."})
+        return data
 
 
 class QuestionTypeSerializer(serializers.ModelSerializer):

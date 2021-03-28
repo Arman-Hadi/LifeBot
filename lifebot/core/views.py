@@ -24,6 +24,10 @@ class QuestionView(RetrieveUpdateDestroyAPIView):
         return get_object_or_404(Question, message_id=kw['message_id'])
 
 
+class QuestionCreateView(CreateAPIView):
+    serializer_class = QuestionSerializer
+
+
 class QuestionTypeView(RetrieveUpdateDestroyAPIView):
     serializer_class = QuestionTypeSerializer
 
@@ -53,8 +57,8 @@ class AnswerUserView(ListAPIView):
     serializer_class = AnswerSerializer
 
     def get_queryset(self):
-        username = str(self.kwargs['username'])
-        user = get_object_or_404(TelUser, chat_id=username)
+        chat_id = str(self.kwargs['chat_id'])
+        user = get_object_or_404(TelUser, chat_id=chat_id)
         return get_list_or_404(Answer, user=user)
 
 

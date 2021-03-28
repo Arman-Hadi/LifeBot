@@ -2,14 +2,18 @@ from django.urls import path
 
 from .views import Index, QuestionView, \
     QuestionTypeView, QuestionTypeListView, AnswerUserView, \
-        AnswerView, AnswerCreateView, UserView, UserCreateView
+        AnswerView, AnswerCreateView, UserView, UserCreateView, \
+            QuestionCreateView
 
 app_name = 'core'
 
 urlpatterns = [
     path('', Index.as_view(), name='index'),
+
     path('q/<int:message_id>',
         QuestionView.as_view(), name='quest-mid'),
+    path('q-create',
+        QuestionCreateView.as_view(), name='quest-create'),
 
     path('qtype/<int:pk>',
         QuestionTypeView.as_view(), name='qtype-pk'),
@@ -20,7 +24,7 @@ urlpatterns = [
 
     path('answer/<int:message_id>',
         AnswerView.as_view(), name='answer'),
-    path('user-answers/<int:username>',
+    path('user-answers/<int:chat_id>',
         AnswerUserView.as_view(), name='user-answers'),
     path('create-answer',
         AnswerCreateView.as_view(), name='create-answer'),

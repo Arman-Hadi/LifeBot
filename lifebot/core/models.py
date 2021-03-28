@@ -46,7 +46,7 @@ class Answer(models.Model):
         choices=answer_choices)
     
     user = models.ForeignKey(TelUser, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.OneToOneField(Question, on_delete=models.CASCADE)
 
     answer_date = models.DateTimeField(
         verbose_name='Answer Date',
