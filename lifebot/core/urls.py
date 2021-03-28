@@ -3,7 +3,7 @@ from django.urls import path
 from .views import Index, QuestionView, \
     QuestionTypeView, QuestionTypeListView, AnswerUserView, \
         AnswerView, AnswerCreateView, UserView, UserCreateView, \
-            QuestionCreateView
+            QuestionCreateView, UserListView
 
 app_name = 'core'
 
@@ -32,5 +32,7 @@ urlpatterns = [
     path('user/<int:chat_id>',
         UserView.as_view(), name='user'),
     path('user-create',
-        UserCreateView.as_view(), name='user-create')
+        UserCreateView.as_view(), name='user-create'),
+    path('user-list',
+        UserListView.as_view(), name='user-list'),
 ]

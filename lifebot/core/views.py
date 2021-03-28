@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import \
     RetrieveUpdateDestroyAPIView, ListAPIView, \
-        ListAPIView, CreateAPIView
+        ListAPIView, CreateAPIView, ListAPIView
 
 from .models import QuestionType, Question, Answer, TelUser
 from .serializers import QuestionSerializer, \
@@ -76,3 +76,8 @@ class UserView(RetrieveUpdateDestroyAPIView):
 
 class UserCreateView(CreateAPIView):
     serializer_class = UserSerializer
+
+
+class UserListView(ListAPIView):
+    serializer_class = UserSerializer
+    queryset = TelUser.objects.all()
