@@ -37,7 +37,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             data.pop('type_name')
         if data['type_id'] == "":
             data.pop('type_id')
-        if not 'type_name' in data or not 'type_id' in data:
+        if not 'type_name' in data and not 'type_id' in data:
             raise serializers.ValidationError(
             {'error': "You must send either 'type_name' or "
                 "'type_id' to distinguish Question Type."})
