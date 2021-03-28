@@ -1,3 +1,6 @@
+from django.db import IntegrityError
+
+from rest_framework.exceptions import status
 from rest_framework import serializers
 
 from .models import QuestionType, Question, Answer, TelUser
@@ -19,20 +22,24 @@ class QuestionSerializer(serializers.ModelSerializer):
         depth = 2
 
     def create(self, validated_data):
-        if 'type_name' in validated_data:
-            qtype = QuestionType.objects.get(
-                name=validated_data['type_name'])
-            q = Question(qtype=qtype,
-                message_id=validated_data['message_id'])
-            q.save()
-            return q
-        elif 'type_id' in validated_data:
-            qtype = QuestionType.objects.get(
-                pk=validated_data['type_id'])
-            q = Question(qtype=qtype,
-                message_id=validated_data['message_id'])
-            q.save()
-            return q
+        try:
+            if 'type_name' in validated_data:
+                qtype = QuestionType.objects.get(
+                    name=validated_data['type_name'])
+                q = Question(qtype=qtype,
+                    message_id=validated_data['message_id'])
+                q.save()
+                return q
+            elif 'type_id' in validated_data:
+                qtype = QuestionType.objects.get(
+                    pk=validated_data['type_id'])
+                q = Question(qtype=qtype,
+                    message_id=validated_data['message_id'])
+                q.save()
+        except IntegrityError:
+            raise serializers.ValidationError(
+                {'error': 'already exists'}, status.HTTP_409_CONFLICT)
+        return q
     
     def validate(self, data):
         if data['type_name'] == "":
@@ -65,9 +72,13 @@ class AnswerSerializer(serializers.ModelSerializer):
         user = TelUser.objects.get(chat_id=validated_data['chat_id'])
         question = Question.objects.get(
             message_id=validated_data['message_id'])
-        answer = Answer(
-            answer=validated_data['answer'],
-            user=user,
-            question=question)
-        answer.save()
+        try:
+            answer = Answer(
+                answer=validated_data['answer'],
+                user=user,
+                question=question)
+            answer.save()
+        except IntegrityError:
+            raise serializers.ValidationError(
+                {'error': 'already exists'}, status.HTTP_409_CONFLICT)
         return answer
