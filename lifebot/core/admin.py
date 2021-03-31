@@ -11,7 +11,7 @@ def elapsed(date):
         elif elapsed.days > 0:
             return f'{elapsed.days}d, {elapsed.seconds // 3600}h'
         elif elapsed.seconds // 3600 > 0:
-            return f'{elapsed.seconds // 3600}h, {elapsed.minutes}m'
+            return f'{elapsed.seconds // 3600}h, {elapsed.seconds // 60}m'
         elif elapsed.seconds // 60 > 0:
             return f'{elapsed.seconds // 60}m'
         else:
