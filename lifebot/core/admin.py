@@ -6,14 +6,13 @@ from .models import Question, QuestionType, Answer, TelUser
 
 def elapsed(date):
         elapsed = timezone.now() - date
-        if elapsed.days // 365 > 0:
-            return f'{elapsed.days // 365}y, {elapsed.days} d'
-        elif elapsed.days > 0:
-            return f'{elapsed.days}d, {elapsed.seconds // 3600}h'
-        elif elapsed.seconds // 3600 > 0:
-            return f'{elapsed.seconds // 3600}h, {elapsed.seconds // 60}m'
-        elif elapsed.seconds // 60 > 0:
-            return f'{elapsed.seconds // 60}m'
+        minute, second = divmod(elapsed.seconds, 60)
+        hour, minute = divmod(minute, 60)
+        year, day = divmod(elapsed.days, 365)
+        if year > 0:
+            return f'{year}y, {day}d'
+        elif minute > 0:
+            return f'{day}d, {hour}h, {minute}m'
         else:
             return f'Just Now!'
 
