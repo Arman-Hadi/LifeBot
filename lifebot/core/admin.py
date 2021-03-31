@@ -13,10 +13,16 @@ def elapsed(date):
     year, day = divmod(elapsed.days, 365)
     if year > 0:
         return f'{year}y, {day}d'
-    elif minute > 0:
-        return f'{day}d, {hour}h, {minute}m'
-    else:
+    elif day==0 and hour==0 and minute==0:
         return f'Just Now!'
+    else:
+        return f'{day}d, {hour}h, {minute}m'
+
+def tehranize(date):
+    d = date.astimezone(tz=pytz.timezone('Asia/Tehran'))
+    print(f'-------{d}-----')
+    print(f'-------{date}-----')
+    return d
 
 
 @admin.register(TelUser)
@@ -30,7 +36,7 @@ class TelUserAdmin(admin.ModelAdmin):
         return elapsed(obj.date_joined)
 
     def in_tehran(self, obj):
-        return obj.date_joined.astimezone(tz=pytz.timezone('Asia/Tehran'))
+        return tehranize(obj.date_joined)
 
 
 @admin.register(QuestionType)
@@ -43,7 +49,7 @@ class QuestionTypeAdmin(admin.ModelAdmin):
         return elapsed(obj.date_updated)
 
     def in_tehran(self, obj):
-        return obj.date_updated.astimezone(tz=pytz.timezone('Asia/Tehran'))
+        return tehranize(obj.date_updated)
 
 
 @admin.register(Question)
@@ -57,7 +63,7 @@ class QuestionAdmin(admin.ModelAdmin):
         return elapsed(obj.date_asked)
 
     def in_tehran(self, obj):
-        return obj.date_asked.astimezone(tz=pytz.timezone('Asia/Tehran'))
+        return tehranize(obj.date_asked)
 
 
 @admin.register(Answer)
@@ -71,4 +77,4 @@ class AnswerAdmin(admin.ModelAdmin):
         return elapsed(obj.answer_date)
 
     def in_tehran(self, obj):
-        return obj.answer_date.astimezone(tz=pytz.timezone('Asia/Tehran'))
+        return tehranize(obj.answer_date)
