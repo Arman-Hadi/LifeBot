@@ -1,5 +1,6 @@
 lifebot/lifebot/local_settings.py
 lifebot/bullshit.json
+lifebot/static
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
