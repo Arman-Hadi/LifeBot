@@ -7,6 +7,8 @@ from rest_framework.generics import \
         ListAPIView, CreateAPIView, ListAPIView
 from rest_framework.settings import api_settings
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from .models import QuestionType, Question, Answer, TelUser
 from .serializers import QuestionSerializer, \
@@ -16,11 +18,13 @@ from .serializers import QuestionSerializer, \
 
 class Index(APIView):
     def get(self, request):
-        return Response("Hello bitch")
+        return Response("Hello, Welcome to LifeBot API!")
 
 
 class QuestionView(RetrieveUpdateDestroyAPIView):
     serializer_class = QuestionSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         kw = self.kwargs
@@ -29,10 +33,14 @@ class QuestionView(RetrieveUpdateDestroyAPIView):
 
 class QuestionCreateView(CreateAPIView):
     serializer_class = QuestionSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class QuestionTypeView(RetrieveUpdateDestroyAPIView):
     serializer_class = QuestionTypeSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         kw = self.kwargs
@@ -45,10 +53,14 @@ class QuestionTypeView(RetrieveUpdateDestroyAPIView):
 class QuestionTypeListView(ListAPIView):
     queryset = QuestionType.objects.all()
     serializer_class = QuestionTypeSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class AnswerView(RetrieveUpdateDestroyAPIView):
     serializer_class = AnswerSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         mid = self.kwargs['message_id']
@@ -58,6 +70,8 @@ class AnswerView(RetrieveUpdateDestroyAPIView):
 
 class AnswerUserView(ListAPIView):
     serializer_class = AnswerSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         chat_id = str(self.kwargs['chat_id'])
@@ -67,10 +81,14 @@ class AnswerUserView(ListAPIView):
 
 class AnswerCreateView(CreateAPIView):
     serializer_class = AnswerSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class UserView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         kw = self.kwargs
@@ -79,11 +97,15 @@ class UserView(RetrieveUpdateDestroyAPIView):
 
 class UserCreateView(CreateAPIView):
     serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class UserListView(ListAPIView):
     serializer_class = UserSerializer
     queryset = TelUser.objects.all()
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class CreateAuthToken(ObtainAuthToken):
