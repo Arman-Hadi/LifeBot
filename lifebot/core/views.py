@@ -5,10 +5,13 @@ from rest_framework.views import APIView
 from rest_framework.generics import \
     RetrieveUpdateDestroyAPIView, ListAPIView, \
         ListAPIView, CreateAPIView, ListAPIView
+from rest_framework.settings import api_settings
+from rest_framework.authtoken.views import ObtainAuthToken
 
 from .models import QuestionType, Question, Answer, TelUser
 from .serializers import QuestionSerializer, \
-    QuestionTypeSerializer, AnswerSerializer, UserSerializer
+    QuestionTypeSerializer, AnswerSerializer, UserSerializer, \
+        AuthTokenSerializer
 
 
 class Index(APIView):
@@ -81,3 +84,9 @@ class UserCreateView(CreateAPIView):
 class UserListView(ListAPIView):
     serializer_class = UserSerializer
     queryset = TelUser.objects.all()
+
+
+class CreateAuthToken(ObtainAuthToken):
+    """Create token for user"""
+    serializer_class = AuthTokenSerializer
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES

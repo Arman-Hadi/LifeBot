@@ -1,4 +1,5 @@
 from django.db import IntegrityError
+from django.contrib.auth import authenticate
 
 from rest_framework.exceptions import status
 from rest_framework import serializers
@@ -82,3 +83,29 @@ class AnswerSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {'error': 'already exists'}, status.HTTP_409_CONFLICT)
         return answer
+
+
+class AuthTokenSerializer(serializers.Serializer):
+    '''Serializer for the user authentication object'''
+    email = serializers.CharField()
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        trim_whitespace=False
+    )
+
+    def validate(self, attrs):
+        """Validate and authenticate user"""
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        user = authenticate(
+            request=self.context.get('request'),
+            username=email,
+            password=password
+        )
+        if not user:
+            msg = 'Unable to authenticate with provided credentials'
+            raise serializers.ValidationError(msg, code='authentication')
+
+        attrs['user'] = user
+        return attrs

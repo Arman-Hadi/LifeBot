@@ -25,7 +25,7 @@ with open(BASE_DIR / 'bullshit.json', 'r') as bulls:
     SECRET_KEY = loads(bulls.read())['KEYS']['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'core',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [

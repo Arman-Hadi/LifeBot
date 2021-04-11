@@ -3,7 +3,7 @@ from django.urls import path
 from .views import Index, QuestionView, \
     QuestionTypeView, QuestionTypeListView, AnswerUserView, \
         AnswerView, AnswerCreateView, UserView, UserCreateView, \
-            QuestionCreateView, UserListView
+            QuestionCreateView, UserListView, CreateAuthToken
 
 app_name = 'core'
 
@@ -35,4 +35,7 @@ urlpatterns = [
         UserCreateView.as_view(), name='user-create'),
     path('user-list',
         UserListView.as_view(), name='user-list'),
+
+    path('token',
+        CreateAuthToken.as_view(), name='token'),
 ]
