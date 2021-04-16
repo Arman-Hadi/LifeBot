@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>ALL Results</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.0/dist/chart.js"></script>
+        {% load static %}
+        <link href="{% static 'stats/css/style.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-primary">
+            <div class="d-flex p-3 justify-content-center">
+                <h1 class="display-6 text-center">تا به حال از چند نفر پرسیدم؟</h1>
+            </div>
+            <div class="d-flex p-2 justify-content-center bg-primary">
+                <h1 class="display-3 m-0 text-light pt-3">{{ usersnum }} نفر</h1>
+            </div>
+        </div>
+
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-success">
+            <div class="d-flex p-3 justify-content-center">
+                <h1 class="display-6 text-center">چند تا جواب گرفتم؟</h1>
+            </div>
+            <div class="d-flex p-2 justify-content-center bg-success">
+                <h1 class="display-3 m-0 text-light pt-3">{{ answersnum }} جواب</h1>
+            </div>
+        </div>
+
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-dark bg-warning">
+            <div class="d-flex flex-lg-row justify-content-around p-0">
+                <div class="text-center flex-fill">
+                    <h1 class="display-3 m-0 text-dark bg-light p-3">%{{ yesnum }}</h1>
+                </div>
+                <div class="text-center flex-fill">
+                    <h1 class="display-3 m-0 text-light bg-dark p-3">%{{ nonum }}</h1>
+                </div>
+            </div>
+            <div class="d-flex flex-lg-row justify-content-around p-0">
+                <div class="text-center flex-fill">
+                    <h1 class="display-3 m-0 p-3">بله</h1>
+                </div>
+                <div class="text-center flex-fill">
+                    <h1 class="display-3 m-0 p-3">خیر</h1>
+                </div>
+            </div>
+            <canvas id="myChart" class="p-3"></canvas>
+        </div>
+
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-info">
+            <div class="d-flex p-3 justify-content-center">
+                <h1 class="display-6 text-center">به طور میانگین روزانه <b>چند نفر از ۱۰ نفر</b>، نمی‌خواستند به زندگی ادامه دهند؟</h1>
+            </div>
+            <div class="d-flex p-2 justify-content-center bg-info">
+                <h1 class="display-3 m-0 text-light pt-3">{{ nopercent }} نفر</h1>
+            </div>
+        </div>
+
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-dark">
+            <div class="d-flex p-3 justify-content-center">
+                <h1 class="display-6 text-center"><b>بیشترین</b> جواب منفی برای این روز بود:</h1>
+            </div>
+            <div class="d-flex p-2 justify-content-center bg-dark">
+                <h1 class="display-5 m-0 text-light pt-3">{{ maxday }} با میانگین <b>{{ maxdaypercent }} از ۱۰ نفر</b></h1>
+            </div>
+        </div>
+
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-dark">
+            <div class="d-flex p-3 justify-content-center">
+                <h1 class="display-6 text-center">و <b>کمترین</b> جواب منفی هم برای این روز:</h1>
+            </div>
+            <div class="d-flex p-2 justify-content-center bg-dark">
+                <h1 class="display-5 m-0 text-light pt-3">{{ minday }} با میانگین <b>{{ mindaypercent }} از ۱۰ نفر</b></h1>
+            </div>
+        </div>
+
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-danger">
+            <div class="d-flex p-3 justify-content-center">
+                <h1 class="display-6 text-center">چه موقع از شبانه‌روز، کمترین میل به زندگی دیده می‌شد؟</h1>
+            </div>
+            <div class="d-flex p-2 justify-content-center bg-danger">
+                <h1 class="display-3 m-0 text-light pt-3">{{ notime }} ها</h1>
+            </div>
+        </div>
+
+        <script>
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['بله', 'خیر'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [{{ yesnum }}, {{ nonum }}],
+                        backgroundColor: [
+                            '#f8f9fa',
+                            '#212529'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+            });
+    </body>
+</html>

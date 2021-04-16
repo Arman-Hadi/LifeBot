@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from datetime import time
 import pytz
+from jdatetime import datetime
 
 
 class TelUser(models.Model):
@@ -38,6 +39,30 @@ class Question(models.Model):
         return f'{str(self.qtype)} - {self.message_id}'
 
 
+
+class AnswerManager(models.Manager):
+    def all_by_date(self, jalali=False):
+        res = []
+        res2 = []
+        dates = []
+
+        for a in self.all():
+            if a.answer_date.date() not in dates:
+                dates.append(a.answer_date.date())
+
+        for date in dates:
+            every = []
+            for a in self.all():
+                if a.answer_date.date() == date:
+                    every.append(a)
+            if jalali:
+                date = datetime.fromgregorian(date=date)
+            res.append((date, every))
+            res2.append(every)
+
+        return (res, res2)
+
+
 class Answer(models.Model):
     answer_choices = [
         ('NO', 'No'),
@@ -54,6 +79,8 @@ class Answer(models.Model):
     answer_date = models.DateTimeField(
         verbose_name='Answer Date',
         auto_now=True)
+
+    objects = AnswerManager()
 
     def tehranize(self):
         return self.answer_date.astimezone(tz=pytz.timezone('Asia/Tehran'))
