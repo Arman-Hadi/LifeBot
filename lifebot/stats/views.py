@@ -5,6 +5,8 @@ from jdatetime import jalali
 
 from core.models import TelUser, Answer
 
+import matplotlib.pyplot as plt
+
 
 class Result(View):
     """Generating Result for each User"""
@@ -70,12 +72,14 @@ class AllRES(View):
 
         answersbydate, answersbydate2 = Answer.objects.all_by_date(jalali=True)
         nopercent = []
+        nodays = []
         for ans in answersbydate2:
             noday = 0
             for a in ans:
                 if a.answer == 'NO':
                     noday += 1
             nopercent.append(noday/len(ans))
+            nodays.append(noday)
 
         maxdaypercent = max(nopercent)
         maxday = nopercent.index(maxdaypercent)
