@@ -72,7 +72,7 @@ class Answer(models.Model):
         verbose_name='Answer',
         max_length=2,
         choices=answer_choices)
-    
+
     user = models.ForeignKey(TelUser, on_delete=models.CASCADE)
     question = models.OneToOneField(Question, on_delete=models.CASCADE)
 
@@ -93,3 +93,16 @@ class Answer(models.Model):
 
     def __str__(self):
         return f'{self.answer} - {self.pk}'
+
+
+class DetailedQuestion(models.Model):
+    answer = models.TextField(max_length=300, null=True, blank=True)
+    question = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
+    qid = models.IntegerField(unique=True)
+    user = models.ForeignKey(TelUser, on_delete=models.CASCADE,
+        null=True, blank=True)
+    date_asked = models.DateTimeField(auto_now_add=True)
+    date_answered = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.answer} - {self.qid}'

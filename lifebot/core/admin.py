@@ -3,7 +3,7 @@ import pytz
 from django.contrib import admin
 from django.utils import timezone
 
-from .models import Question, QuestionType, Answer, TelUser
+from .models import Question, QuestionType, Answer, TelUser, DetailedQuestion
 
 
 def elapsed(date):
@@ -78,3 +78,15 @@ class AnswerAdmin(admin.ModelAdmin):
 
     def in_tehran(self, obj):
         return tehranize(obj.answer_date)
+
+
+@admin.register(DetailedQuestion)
+class DetailedQuestionAdmin(admin.ModelAdmin):
+    list_display = ('qid', 'question', 'answer', 'user', 'date_asked', 'date_answered')
+    list_filter = ('user', 'date_asked', 'date_answered')
+
+    def ask_t(self, obj):
+        return tehranize(obj.date_asked)
+
+    def answer_t(self, obj):
+        return tehranize(obj.date_answered)

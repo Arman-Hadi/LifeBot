@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from rest_framework.exceptions import status
 from rest_framework import serializers
 
-from .models import QuestionType, Question, Answer, TelUser
+from .models import AnswerManager, QuestionType, Question, Answer, TelUser, DetailedQuestion
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -109,3 +109,36 @@ class AuthTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+
+class DetailedQuestionSerializer(serializers.ModelSerializer):
+    chat_id = serializers.IntegerField(write_only=True)
+    qtype = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = DetailedQuestion
+        fields = '__all__'
+        depth = 1
+
+    def create(self, data):
+        user = TelUser.objects.get(chat_id=data['chat_id'])
+        question = QuestionType.objects.get(
+            name=data['qtype'])
+
+        data.pop('qtype')
+        data.pop('chat_id')
+        params = {
+            'user': user,
+            'question': question,
+            **data
+        }
+
+        try:
+            q = DetailedQuestion(
+                **params)
+            q.save()
+        except IntegrityError:
+            raise serializers.ValidationError(
+                {'error': 'already exists'}, status.HTTP_409_CONFLICT)
+
+        return q

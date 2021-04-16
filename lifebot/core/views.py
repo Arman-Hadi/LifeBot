@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, get_list_or_404
+from rest_framework import serializers
 
 from rest_framework.response import Response 
 from rest_framework.views import APIView
@@ -10,10 +11,10 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from .models import QuestionType, Question, Answer, TelUser
+from .models import QuestionType, Question, Answer, TelUser, DetailedQuestion
 from .serializers import QuestionSerializer, \
     QuestionTypeSerializer, AnswerSerializer, UserSerializer, \
-        AuthTokenSerializer
+        AuthTokenSerializer, DetailedQuestionSerializer
 
 
 class Index(APIView):
@@ -112,3 +113,19 @@ class CreateAuthToken(ObtainAuthToken):
     """Create token for user"""
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+
+class DetailedQuestionView(RetrieveUpdateDestroyAPIView):
+    serializer_class = DetailedQuestionSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
+
+    def get_object(self):
+        kw = self.kwargs
+        return get_object_or_404(DetailedQuestion, qid=kw['qid'])
+
+
+class DetailedQuestionCreate(CreateAPIView):
+    serializer_class = DetailedQuestionSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser,)
+    authentication_classes = (TokenAuthentication,)
