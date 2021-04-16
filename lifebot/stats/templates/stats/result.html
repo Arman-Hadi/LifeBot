@@ -25,7 +25,7 @@
                 <h1 class="display-4 text-center">روز است که با هم هستیم؛</h1>
             </div>
         </div>
-
+<!--
         <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-secondary">
             <div class="d-flex p-2 justify-content-center bg-secondary">
                 <h1 class="display-1 m-0 text-light pt-3">{{ qnum }}</h1>
@@ -34,10 +34,10 @@
                 <h1 class="display-4 text-center">دفعه این سوال را از تو پرسیدم:</h1>
             </div>
         </div>
-
+-->
         <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-info">
             <div class="d-flex p-3 justify-content-center">
-                <h1 class="display-6 text-center">با توجه به حال و وضعیتی که الان، در این لحظه داری، می‌خوای این زندگی رو ادامه بدی؟</h1>
+                <h1 class="display-6 text-center">از تو پرسیدم:<br>با توجه به حال و وضعیتی که الان، در این لحظه داری، می‌خوای این زندگی رو ادامه بدی؟</h1>
             </div>
             <div class="d-flex flex-lg-row justify-content-around bg-info p-0">
                 <div class="text-center flex-fill border-start border-2">
@@ -76,6 +76,20 @@
                 </div>
             </div>
             <canvas id="myChart" class="p-3"></canvas>
+        </div>
+
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-secondary">
+            <div class="d-flex p-2 justify-content-center bg-secondary">
+                <h1 class="display-1 m-0 text-light pt-3">%{{ nopercent }}</h1>
+            </div>
+            <div class="d-flex p-3 justify-content-center">
+                <h1 class="display-5 text-center">از دفعاتی که پرسیدم، نمی‌خواستی به زندگیت ادامه بدی؛</h1>
+            </div>
+        </div>
+
+        <div class="d-lg-flex flex-lg-column m-3 border border-2 rounded-3 border-secondary">
+            <div class="d-flex p-3 justify-content-center">
+                <h1 class="display-5 text-center">که بیشتر اوقات <b>{{time}} ها</b> گفتی نه.</h1>
         </div>
 
         <script>

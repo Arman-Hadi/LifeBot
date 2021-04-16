@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from datetime import time
+import pytz
+
 
 class TelUser(models.Model):
     chat_id = models.IntegerField(verbose_name='Chat ID', unique=True)
@@ -51,6 +54,15 @@ class Answer(models.Model):
     answer_date = models.DateTimeField(
         verbose_name='Answer Date',
         auto_now=True)
+
+    def tehranize(self):
+        return self.answer_date.astimezone(tz=pytz.timezone('Asia/Tehran'))
+
+    def day_or_night(self):
+        t = self.tehranize().time()
+        if time(hour=4) < t < time(hour=18):
+            return "D"
+        return "N"
 
     def __str__(self):
         return f'{self.answer} - {self.pk}'

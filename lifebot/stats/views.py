@@ -17,13 +17,21 @@ class Result(View):
         del year, hour, minute, second
 
 
-        yesnum = nonum = 0
+        yesnum = nonum = day = night = 0
         answers = get_list_or_404(Answer, user=user)
         for answer in answers:
             if answer.answer == 'YS':
                 yesnum += 1
             else:
                 nonum += 1
+                if answer.day_or_night() == "D":
+                    day += 1
+                else:
+                    night += 1
+
+        notime = 'روز'
+        if night > day:
+            notime = 'شب'
 
         return render(request, 'stats/result.html', {
             'name': user.first_name,
@@ -32,4 +40,6 @@ class Result(View):
             'anum': len(answers),
             'yesnum': yesnum,
             'nonum': nonum,
+            'nopercent': round((nonum/len(answers))*100),
+            'time': notime,
         })
