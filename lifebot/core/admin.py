@@ -54,7 +54,7 @@ class QuestionTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('message_id', 'qtype', 'in_tehran',
+    list_display = ('message_id', 'qtype', 'is_active', 'in_tehran',
         'elapsed_time', 'date_asked')
     search_fields = ('qtype', 'message_id')
     list_filter = ('date_asked',)
@@ -82,8 +82,9 @@ class AnswerAdmin(admin.ModelAdmin):
 
 @admin.register(DetailedQuestion)
 class DetailedQuestionAdmin(admin.ModelAdmin):
-    list_display = ('qid', 'question', 'answer', 'user', 'date_asked', 'date_answered')
-    list_filter = ('user', 'date_asked', 'date_answered')
+    list_display = ('qid', 'question', 'answer', 'user', 'is_active',
+        'date_asked', 'date_answered')
+    list_filter = ('user', 'date_asked', 'date_answered',)
 
     def ask_t(self, obj):
         return tehranize(obj.date_asked)

@@ -1,10 +1,11 @@
 from django.db import IntegrityError
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 
 from rest_framework.exceptions import status
 from rest_framework import serializers
 
-from .models import AnswerManager, QuestionType, Question, Answer, TelUser, DetailedQuestion
+from .models import QuestionType, Question, Answer, TelUser, DetailedQuestion
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -74,6 +75,9 @@ class AnswerSerializer(serializers.ModelSerializer):
         user = TelUser.objects.get(chat_id=validated_data['chat_id'])
         question = Question.objects.get(
             message_id=validated_data['message_id'])
+        if not question.is_active():
+            raise serializers.ValidationError(
+            {'active': 'False'}, status.HTTP_400_BAD_REQUEST)
         try:
             answer = Answer(
                 answer=validated_data['answer'],
@@ -84,6 +88,12 @@ class AnswerSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {'error': 'already exists'}, status.HTTP_409_CONFLICT)
         return answer
+
+    def update(self, instance, validated_data):
+        if instance.question.is_active():
+            return super().update(instance, validated_data)
+        raise serializers.ValidationError(
+            {'active': 'False'}, status.HTTP_400_BAD_REQUEST)
 
 
 class AuthTokenSerializer(serializers.Serializer):
@@ -145,3 +155,9 @@ class DetailedQuestionSerializer(serializers.ModelSerializer):
                 {'error': 'already exists'}, status.HTTP_409_CONFLICT)
 
         return q
+
+    def update(self, instance, validated_data):
+        if instance.is_active():
+            return super().update(instance, validated_data)
+        raise serializers.ValidationError(
+            {'active': 'False'}, status.HTTP_400_BAD_REQUEST)

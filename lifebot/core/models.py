@@ -47,7 +47,6 @@ class Question(models.Model):
         return f'{str(self.qtype)} - {self.message_id}'
 
 
-
 class AnswerManager(models.Manager):
     def all_by_date(self, jalali=False):
         res = []
