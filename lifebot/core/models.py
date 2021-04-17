@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from datetime import time
+from datetime import timedelta
 import pytz
 from jdatetime import datetime
 
@@ -34,6 +36,12 @@ class Question(models.Model):
     qtype = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
     message_id = models.IntegerField(verbose_name='Message ID', unique=True)
     date_asked = models.DateTimeField(auto_now=True)
+
+    def is_active(self):
+        delta = timezone.now() - self.date_asked
+        if delta > timedelta(days=1):
+            return False
+        return True
 
     def __str__(self):
         return f'{str(self.qtype)} - {self.message_id}'
@@ -102,7 +110,18 @@ class DetailedQuestion(models.Model):
     user = models.ForeignKey(TelUser, on_delete=models.CASCADE,
         null=True, blank=True)
     date_asked = models.DateTimeField(auto_now_add=True)
-    date_answered = models.DateTimeField(blank=True, null=True)
+    date_answered = models.DateTimeField(auto_now=True)
+
+    def is_answered(self):
+        if self.answer or self.answer != "":
+            return True
+        return False
+
+    def is_active(self):
+        delta = timezone.now() - self.date_asked
+        if delta > timedelta(days=1):
+            return False
+        return True
 
     def __str__(self):
         return f'{self.answer} - {self.qid}'

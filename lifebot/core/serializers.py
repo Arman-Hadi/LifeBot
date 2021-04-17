@@ -19,7 +19,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = '__all__'
+        fields = ('id', 'qtype', 'message_id', 'date_asked',
+            'is_active', 'type_name', 'type_id')
         depth = 2
 
     def create(self, validated_data):
@@ -117,7 +118,9 @@ class DetailedQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DetailedQuestion
-        fields = '__all__'
+        fields = ('id', 'question', 'answer', 'user', 'qid',
+            'is_answered', 'date_asked', 'date_answered',
+            'is_active', 'chat_id', 'qtype')
         depth = 1
 
     def create(self, data):
