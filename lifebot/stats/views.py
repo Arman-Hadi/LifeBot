@@ -1,24 +1,16 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.views.generic import View
 from django.utils import timezone
-from jdatetime import jalali
 
 from core.models import TelUser, Answer
-
-import matplotlib.pyplot as plt
 
 
 class Result(View):
     """Generating Result for each User"""
     def get(self, request, chat_id):
         user = get_object_or_404(TelUser, chat_id=chat_id)
-
         elapsed = timezone.now() - user.date_joined
-        minute, second = divmod(elapsed.seconds, 60)
-        hour, minute = divmod(minute, 60)
-        year, day = divmod(elapsed.days, 365)
-        del year, hour, minute, second
-
+        days = elapsed.days
 
         yesnum = nonum = day = night = 0
         answers = get_list_or_404(Answer, user=user)
@@ -38,7 +30,7 @@ class Result(View):
 
         return render(request, 'stats/result.html', {
             'name': user.first_name,
-            'days': day,
+            'days': days,
             'qnum': day*2,
             'anum': len(answers),
             'yesnum': yesnum,
