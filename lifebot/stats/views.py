@@ -1,8 +1,12 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.views.generic import View
 from django.utils import timezone
+from django.http import HttpResponse
+from django.conf import settings
 
 from core.models import TelUser, Answer
+
+import csv
 
 
 class Result(View):
@@ -99,3 +103,33 @@ class AllRES(View):
             'mindaypercent': round(mindaypercent*10),
             'notime': notime,
         })
+
+
+class ReportCSV(View):
+    def get(self, request):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="report.csv"'
+
+        allbydate = Answer.objects.all_by_date(jalali=True)[0]
+        row1 = [str(i[0].date()) for i in allbydate]
+        try:
+            if request.GET['jalali'] == '0':
+                allbydate = Answer.objects.all_by_date(jalali=False)[0]
+                row1 = [str(i[0]) for i in allbydate]
+        except:
+            allbydate = Answer.objects.all_by_date(jalali=True)[0]
+            row1 = [str(i[0].date()) for i in allbydate]
+
+        row2 = []
+        for i in allbydate:
+            counter = 0
+            for j in i[1]:
+                if j.answer == 'NO':
+                    counter += 1
+            row2.append((counter/len(i[1]))*100)
+
+        writer = csv.writer(response)
+        writer.writerow(row1)
+        writer.writerow(row2)
+
+        return response
