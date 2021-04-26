@@ -126,7 +126,8 @@ class ReportCSV(View):
             for j in i[1]:
                 if j.answer == 'NO':
                     counter += 1
-            row2.append((counter/len(i[1]))*100)
+            avr = (counter/len(i[1]))*100
+            row2.append(round(avr, 2))
 
         writer = csv.writer(response)
         writer.writerow(row1)
