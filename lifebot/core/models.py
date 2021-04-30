@@ -25,7 +25,7 @@ class TelUser(models.Model):
 
 class QuestionType(models.Model):
     name = models.CharField(verbose_name='Type Name', max_length=100)
-    text = models.TextField(verbose_name='Question Text', max_length=350)
+    text = models.TextField(verbose_name='Question Text')
     date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
