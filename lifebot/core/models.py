@@ -103,7 +103,7 @@ class Answer(models.Model):
 
 
 class DetailedQuestion(models.Model):
-    answer = models.TextField(max_length=300, null=True, blank=True)
+    answer = models.TextField(null=True, blank=True)
     question = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
     qid = models.IntegerField(unique=True)
     user = models.ForeignKey(TelUser, on_delete=models.CASCADE,
