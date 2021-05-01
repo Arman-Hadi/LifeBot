@@ -118,7 +118,7 @@ class DetailedQuestion(models.Model):
 
     def is_active(self):
         delta = timezone.now() - self.date_asked
-        if delta > timedelta(days=1):
+        if delta > timedelta(days=7):
             return False
         return True
 
