@@ -120,7 +120,7 @@ class ReportCSV(View):
             allbydate = Answer.objects.all_by_date(jalali=True)[0]
             row1 = [str(i[0].date()) for i in allbydate]
 
-        row2 = []
+        row2 = row3 = []
         for i in allbydate:
             counter = 0
             for j in i[1]:
@@ -128,6 +128,9 @@ class ReportCSV(View):
                     counter += 1
             avr = (counter/len(i[1]))*100
             row2.append(round(avr, 2))
+            row3.append(avr/counter)
+
+        row3 = [i for i in row2]
 
         writer = csv.writer(response)
         writer.writerow(row1)

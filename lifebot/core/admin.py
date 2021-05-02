@@ -57,7 +57,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('message_id', 'qtype', 'is_active', 'in_tehran',
         'elapsed_time', 'date_asked')
     search_fields = ('qtype', 'message_id')
-    list_filter = ('date_asked',)
+    list_filter = ('date_asked', 'qtype')
 
     def elapsed_time(self, obj):
         return elapsed(obj.date_asked)
@@ -84,7 +84,8 @@ class AnswerAdmin(admin.ModelAdmin):
 class DetailedQuestionAdmin(admin.ModelAdmin):
     list_display = ('qid', 'question', 'answer', 'user', 'is_active',
         'date_asked', 'date_answered')
-    list_filter = ('user', 'date_asked', 'date_answered',)
+    list_filter = ('question', 'date_asked', 'date_answered',)
+    search_fields = ('user',)
 
     def ask_t(self, obj):
         return tehranize(obj.date_asked)
