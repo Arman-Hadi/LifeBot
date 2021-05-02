@@ -71,7 +71,7 @@ class AnswerAdmin(admin.ModelAdmin):
     list_display = ('pk', 'answer', 'user', 'question',
         'in_tehran', 'elapsed_time', 'answer_date')
     search_fields = ('answer', 'user', 'question')
-    list_filter = ('answer_date',)
+    list_filter = ('answer_date', 'question')
 
     def elapsed_time(self, obj):
         return elapsed(obj.answer_date)
