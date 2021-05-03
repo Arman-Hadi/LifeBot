@@ -20,8 +20,6 @@ def elapsed(date):
 
 def tehranize(date):
     d = date.astimezone(tz=pytz.timezone('Asia/Tehran'))
-    print(f'-------{d}-----')
-    print(f'-------{date}-----')
     return d
 
 
