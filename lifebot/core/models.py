@@ -54,7 +54,7 @@ class AnswerManager(models.Manager):
         dates = []
 
         for a in self.all():
-            if a.chat_id == 305710135:
+            if a.user.chat_id == 305710135:
                 continue
             if a.answer_date.date() not in dates:
                 dates.append(a.answer_date.date())
@@ -62,7 +62,7 @@ class AnswerManager(models.Manager):
         for date in dates:
             every = []
             for a in self.all():
-                if a.chat_id == 305710135:
+                if a.user.chat_id == 305710135:
                     continue
                 if a.answer_date.date() == date:
                     every.append(a)
