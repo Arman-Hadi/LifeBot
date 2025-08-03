@@ -1,2 +1,2 @@
 # LifeBot
-Telegram bot asking you about life!
+Telegram bot asking you about life.
